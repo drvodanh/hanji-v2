@@ -11,11 +11,11 @@ const server_ip_address = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '
 const FILE_ROUTE = "";
 const CONJUGATE_ROUTE = '/conjugate=';
 
-app.get('/', function(req, res){
-    database.searchKor('하다',function(results){
-        res.send(results)
-    });
-});
+//app.get('/', function(req, res){
+//    database.searchKor('하다',function(results){
+//        res.send(results)
+//    });
+//});
 
 // Works for both conjugated and infinitive forms
 app.get(CONJUGATE_ROUTE+':term', function (req, res) {
