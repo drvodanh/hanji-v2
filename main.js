@@ -14,7 +14,6 @@ const server_ip_address =
 const FILE_ROUTE = "";
 const CONJUGATE_ROUTE = "/conjugate=";
 
-app.use(cors());
 app.get("/", function (req, res) {
   database.searchKor("하다", function (results) {
     res.send(results);
