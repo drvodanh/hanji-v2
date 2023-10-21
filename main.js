@@ -6,6 +6,7 @@ let database = require("./database");
 const express = require("express");
 var cors = require("cors");
 const app = express();
+app.use(cors());
 
 const server_port =
   process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
