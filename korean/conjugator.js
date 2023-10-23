@@ -93,7 +93,7 @@ conjugator.drop_l_and_borrow_padchim = function (x, y) {
 
 conjugator.dont_insert_eh = function (x, y) {
   if (hangeul.padchim(x.charAt(x.length - 1)) == "ᆯ" && y[0] == "면") {
-    return ["join", x + y];
+    return ["Cách ghép: ", x + y];
   }
 };
 
@@ -1650,7 +1650,8 @@ conjugator.adjective = function (infinitive, regular) {
   }
 };
 conjugator.adjective.conjugation = true;
-///////////!SECTION
+
+//. - add new conjugations
 conjugator.phai_lam_gi = function (infinitive, regular) {
   base = conjugator.base2(infinitive, regular);
   if (
