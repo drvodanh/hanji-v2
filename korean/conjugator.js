@@ -100,7 +100,7 @@ conjugator.dont_insert_eh = function (x, y) {
 conjugator.insert_eh = function (characters) {
   return function (x, y) {
     if (hangeul.padchim(x.charAt(x.length - 1)) && y[0] in characters) {
-      return ["padchim + consonant -> insert 으", x + "으" + y];
+      return ["padchim + phụ âm -> thêm 으", x + "으" + y];
     }
   };
 };
@@ -165,7 +165,7 @@ conjugator.merge_rules = [
   }),
   // default rule
   function (x, y) {
-    return ["join", x + y];
+    return ["Cách ghép: ", x + y];
   },
 ];
 
