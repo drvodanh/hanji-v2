@@ -17,7 +17,7 @@ conjugator.no_padchim_rule = function (characters) {
   return function (x, y) {
     if (!hangeul.padchim(x.charAt(x.length - 1)) && y[0] in characters) {
       return [
-        "borrow padchim",
+        "Mượn padchim",
         x.substring(0, x.length - 1) +
           hangeul.join(
             hangeul.lead(x[x.length - 1]),
@@ -41,7 +41,7 @@ conjugator.vowel_contraction = function (vowel1, vowel2, new_vowel, trace) {
       hangeul.match(y.charAt(0), "ᄋ", vowel2, "*")
     ) {
       return [
-        "vowel contraction [" +
+        "Rút gọn nguyên âm [" +
           vowel1 +
           " " +
           vowel2 +
@@ -62,7 +62,7 @@ conjugator.vowel_contraction = function (vowel1, vowel2, new_vowel, trace) {
 
 conjugator.drop_l = function (x, y) {
   if (hangeul.padchim(x[x.length - 1]) == "ᆯ") {
-    conjugator.reasons.push("drop ㄹ");
+    conjugator.reasons.push("bỏ ㄹ");
     return (
       x.substring(0, x.length - 1) +
       hangeul.join(
@@ -77,7 +77,7 @@ conjugator.drop_l = function (x, y) {
 conjugator.drop_l_and_borrow_padchim = function (x, y) {
   if (hangeul.padchim(x.charAt(x.length - 1)) == "ᆯ") {
     conjugator.reasons.push(
-      "drop " + hangeul.padchim(x.charAt(x.length - 1)) + " borrow padchim"
+      "bỏ " + hangeul.padchim(x.charAt(x.length - 1)) + " mượn padchim"
     );
     return (
       x.substring(0, x.length - 1) +
@@ -93,7 +93,7 @@ conjugator.drop_l_and_borrow_padchim = function (x, y) {
 
 conjugator.dont_insert_eh = function (x, y) {
   if (hangeul.padchim(x.charAt(x.length - 1)) == "ᆯ" && y[0] == "면") {
-    return ["Cách ghép: ", x + y];
+    return [`Cách ghép: ${x + y} `];
   }
 };
 
@@ -165,7 +165,7 @@ conjugator.merge_rules = [
   }),
   // default rule
   function (x, y) {
-    return ["Cách ghép: ", x + y];
+    return [`Cách ghép: ${x + y} `];
   },
 ];
 
