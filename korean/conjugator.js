@@ -1670,6 +1670,14 @@ conjugator.phai_lam_gi = function (infinitive, regular) {
 };
 conjugator.phai_lam_gi.conjugation = true;
 
+conjugator.co_the = function (infinitive, regular) {
+  return conjugator.merge(
+    conjugator.future_base(infinitive, regular),
+    " 수 있다/ 없다"
+  );
+};
+conjugator.co_the.conjugation = true;
+
 ////////////////
 
 conjugator.conjugations = [];
