@@ -16,9 +16,7 @@ const FILE_ROUTE = "";
 const CONJUGATE_ROUTE = "/conjugate=";
 
 app.get("/", function (req, res) {
-  database.searchKor("하다", function (results) {
-    res.send(results);
-  });
+  res.redirect(CONJUGATE_ROUTE + "하다");
 });
 
 // Works for both conjugated and infinitive forms

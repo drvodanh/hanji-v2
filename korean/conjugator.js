@@ -10,14 +10,10 @@ try {
 var conjugator = {};
 
 conjugator.no_padchim_rule = function (characters) {
-  /* no_padchim_rule is a helper function for defining merges where a
-        character will take the padchim of a merged character if the first
-        character doesn't already have a padchim, .e.g. 습 -> 가 + 습니다 -> 갑니다.
-    */
   return function (x, y) {
     if (!hangeul.padchim(x.charAt(x.length - 1)) && y[0] in characters) {
       return [
-        "Mượn padchim",
+        "borrow padchim",
         x.substring(0, x.length - 1) +
           hangeul.join(
             hangeul.lead(x[x.length - 1]),
@@ -32,16 +28,16 @@ conjugator.no_padchim_rule = function (characters) {
 
 conjugator.vowel_contraction = function (vowel1, vowel2, new_vowel, trace) {
   /* vowel contraction is a helper function for defining common contractions
-       between a character without a padchim and a character that starts with
-        'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.
-    */
+         between a character without a padchim and a character that starts with
+          'ᄋ', e.g. ㅐ + ㅕ -> ㅐ when applied to 해 + 였 yields 했.
+      */
   return function (x, y) {
     if (
       hangeul.match(x.charAt(x.length - 1), "*", vowel1, null) &&
       hangeul.match(y.charAt(0), "ᄋ", vowel2, "*")
     ) {
       return [
-        "Rút gọn nguyên âm [" +
+        "vowel contraction [" +
           vowel1 +
           " " +
           vowel2 +
@@ -62,45 +58,39 @@ conjugator.vowel_contraction = function (vowel1, vowel2, new_vowel, trace) {
 
 conjugator.drop_l = function (x, y) {
   if (hangeul.padchim(x[x.length - 1]) == "ᆯ") {
-    conjugator.reasons.push("bỏ ㄹ");
-    return (
+    let stem = hangeul.join(
+      hangeul.lead(x[x.length - 1]),
+      hangeul.vowel(x[x.length - 1])
+    );
+    let conjugation = x.substring(0, x.length - 1) + stem + y;
+    conjugator.reasons.push(`drop ㄹ (${x} -> ${stem})`);
+    conjugator.reasons.push(`join (${stem} + ${y} -> ${conjugation})`);
+    return conjugation;
+  }
+};
+conjugator.drop_l_and_borrow_padchim = function (x, y) {
+  if (hangeul.padchim(x.charAt(x.length - 1)) == "ᆯ") {
+    let stem =
       x.substring(0, x.length - 1) +
       hangeul.join(
         hangeul.lead(x[x.length - 1]),
         hangeul.vowel(x[x.length - 1])
-      ) +
-      y
-    );
-  }
-};
-
-conjugator.drop_l_and_borrow_padchim = function (x, y) {
-  if (hangeul.padchim(x.charAt(x.length - 1)) == "ᆯ") {
-    conjugator.reasons.push(
-      "bỏ " + hangeul.padchim(x.charAt(x.length - 1)) + " mượn padchim"
-    );
-    return (
-      x.substring(0, x.length - 1) +
-      hangeul.join(
-        hangeul.lead(x[x.length - 1]),
-        hangeul.vowel(x[x.length - 1]),
-        hangeul.padchim(y[0])
-      ) +
-      y.substring(1)
-    );
+      );
+    conjugator.reasons.push(`drop ㄹ (${x} -> ${stem})`);
+    return conjugator.merge(stem, y);
   }
 };
 
 conjugator.dont_insert_eh = function (x, y) {
   if (hangeul.padchim(x.charAt(x.length - 1)) == "ᆯ" && y[0] == "면") {
-    return ["Cách ghép: ", `${x + y}`];
+    return ["join", x + y];
   }
 };
 
 conjugator.insert_eh = function (characters) {
   return function (x, y) {
     if (hangeul.padchim(x.charAt(x.length - 1)) && y[0] in characters) {
-      return ["padchim + phụ âm -> thêm 으", x + "으" + y];
+      return ["padchim + consonant -> insert 으", x + "으" + y];
     }
   };
 };
@@ -120,8 +110,8 @@ conjugator.lm_merge = function (x, y) {
 };
 
 /* merge rules is a list of rules that are applied in order when merging a verb
-   stem with a tense ending
-*/
+     stem with a tense ending
+  */
 
 conjugator.merge_rules = [
   conjugator.no_padchim_rule({
@@ -165,31 +155,33 @@ conjugator.merge_rules = [
   }),
   // default rule
   function (x, y) {
-    return ["Cách ghép: ", `${x + y}`];
+    return ["join", x + y];
   },
 ];
 
 conjugator.reasons = [];
 
-conjugator.merge = function (x, y) {
+conjugator.merge = function (x, y, noReasons = false) {
   /* concatenates every element in a list using the rules to
-       merge the strings
-    */
+         merge the strings
+      */
   var response = null;
   conjugator.merge_rules.forEach(function (rule) {
     if (!response) {
       output = rule(x, y);
       if (output) {
-        conjugator.reasons.push(
-          (output[0] ? output[0] : "") +
-            " (" +
-            x +
-            " + " +
-            y +
-            " -> " +
-            output[1] +
-            ") "
-        );
+        if (!noReasons) {
+          conjugator.reasons.push(
+            (output[0] ? output[0] : "") +
+              " (" +
+              x +
+              " + " +
+              y +
+              " -> " +
+              output[1] +
+              ")"
+          );
+        }
         response = output[1];
       }
     }
@@ -200,7 +192,7 @@ conjugator.merge = function (x, y) {
 conjugator.both_regular_and_irregular = {
   일: true,
   곱: true,
-  파묻: true,
+  파묻: false,
   누르: true,
   묻: true,
   이르: true,
@@ -969,6 +961,16 @@ conjugator.not_l_euh_irregular = {
 
 conjugator.not_l_irregular = {};
 
+//!section
+conjugator.always_honorific = {
+  계시: true,
+  드시: true,
+  돌아가시: true,
+  모시: true,
+  주무시: true,
+};
+//!section
+
 conjugator.after_last_space = function (infinitive) {
   return infinitive.split(" ").reverse()[0];
 };
@@ -1034,6 +1036,48 @@ conjugator.is_d_irregular = function (infinitive, regular) {
   );
 };
 
+//!section
+/**
+ * Checks if a verb/adj is one that's always in honorific, i.e. 계시다
+ *
+ * @param {string} infinitive
+ * @param {boolean | undefined} regular
+ * @returns {boolean} true if in infinitive should always be honorific, false otherwise
+ */
+
+conjugator.isAlwaysHonorific = function (infinitive, regular) {
+  return conjugator.base(infinitive, regular) in conjugator.always_honorific;
+};
+
+/**
+ * Remove 시 from words like 계시다 and 드시다 that should always be in honorific form.
+ * This is useful for conjugations like declarative present informal high.
+ *
+ * @param {string} infinitive
+ * @param {boolean | undefined} regular
+ * @returns the infinitive with 시 removed
+ */
+
+conjugator.maybeStripHonorific = function (infinitive, regular) {
+  // Don't strip regular verbs/adj.
+  if (!conjugator.isAlwaysHonorific(infinitive, regular)) return infinitive;
+
+  const oldStem = conjugator.base(infinitive);
+  // Remove 시 at the end of the word, or next to 다 if it exists
+  const newStem = oldStem.replace(/시다?$/, "");
+  conjugator.reasons.push(
+    `honorific verb/adj -> remove 시 (${oldStem} -> ${newStem})`
+  );
+  return newStem;
+};
+
+conjugator.join = function (x, y) {
+  conjugator.reasons.push(`join (${x} + ${y} -> ${x + y})`);
+  return x + y;
+};
+
+//!section
+
 conjugator.verb_types = {
   "ㅅ 불규칙 동사 (irregular verb)": conjugator.is_s_irregular,
   "ㄹ 불규칙 동사 (irregular verb)": conjugator.is_l_irregular,
@@ -1078,16 +1122,17 @@ conjugator.base2 = function (infinitive, regular) {
   if (infinitive == "푸") {
     return "퍼";
   }
+
   new_infinitive = infinitive;
-  if (conjugator.is_h_irregular(infinitive, regular)) {
-    new_infinitive = conjugator.merge(
-      infinitive.substring(0, infinitive.length - 1) +
-        hangeul.join(
-          hangeul.lead(infinitive.charAt(infinitive.length - 1)),
-          hangeul.vowel(infinitive.charAt(infinitive.length - 1))
-        ),
-      "이"
+  let x =
+    infinitive.substring(0, infinitive.length - 1) +
+    hangeul.join(
+      hangeul.lead(infinitive.charAt(infinitive.length - 1)),
+      hangeul.vowel(infinitive.charAt(infinitive.length - 1))
     );
+
+  if (conjugator.is_h_irregular(infinitive, regular)) {
+    new_infinitive = conjugator.merge(x, "이", true);
     conjugator.reasons.push(
       "ㅎ irregular (" + infinitive + " -> " + new_infinitive + ")"
     );
@@ -1101,14 +1146,7 @@ conjugator.base2 = function (infinitive, regular) {
     } else {
       new_vowel = "ㅜ";
     }
-    new_infinitive = conjugator.merge(
-      infinitive.substring(0, infinitive.length - 1) +
-        hangeul.join(
-          hangeul.lead(infinitive.charAt(infinitive.length - 1)),
-          hangeul.vowel(infinitive.charAt(infinitive.length - 1))
-        ),
-      hangeul.join("ᄋ", new_vowel)
-    );
+    new_infinitive = conjugator.merge(x, hangeul.join("ᄋ", new_vowel), true);
     conjugator.reasons.push(
       "ㅂ irregular (" + infinitive + " -> " + new_infinitive + ")"
     );
@@ -1126,13 +1164,7 @@ conjugator.base2 = function (infinitive, regular) {
       "ㄷ irregular (" + infinitive + " -> " + new_infinitive + ")"
     );
   } else if (conjugator.is_s_irregular(infinitive, regular)) {
-    new_infinitive = new hangeul.Geulja(
-      infinitive.substring(0, infinitive.length - 1) +
-        hangeul.join(
-          hangeul.lead(infinitive.charAt(infinitive.length - 1)),
-          hangeul.vowel(infinitive.charAt(infinitive.length - 1))
-        )
-    );
+    new_infinitive = new hangeul.Geulja(x);
     new_infinitive.hidden_padchim = true;
     conjugator.reasons.push(
       "ㅅ irregular (" +
@@ -1178,6 +1210,48 @@ conjugator.base3 = function (infinitive, regular) {
   }
 };
 
+//!SECTION pass
+conjugator.past_base = function (infinitive, regular) {
+  ps = conjugator.declarative_present_informal_low(infinitive, regular, true);
+  if (hangeul.find_vowel_to_append(ps) == "아") {
+    return conjugator.merge(ps, "았");
+  } else {
+    return conjugator.merge(ps, "었");
+  }
+};
+conjugator.past_base.conjugation = true;
+
+//!SECTION future
+conjugator.future_base = function (infinitive, regular) {
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l_and_borrow_padchim(
+      conjugator.base3(infinitive, regular),
+      "을"
+    );
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "을");
+};
+conjugator.future_base.conjugation = true;
+
+//!SECTION add_honorific
+conjugator.add_honorific = function (infinitive, regular) {
+  // In this case, the infinitive already has an honorific
+  if (conjugator.isAlwaysHonorific(infinitive, regular)) {
+    return conjugator.base(infinitive);
+  } else if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "시");
+  } else {
+    return conjugator.merge(conjugator.base3(infinitive, regular), "시");
+  }
+};
+conjugator.is_itda_obda = function (infinitive, regular) {
+  let stem = conjugator.base(infinitive, regular);
+  return (
+    stem.charAt(stem.length - 1) == "있" || stem.charAt(stem.length - 1) == "없"
+  );
+};
+
+//!SECTION
 conjugator.declarative_present_informal_low = function (
   infinitive,
   regular,
@@ -1258,6 +1332,7 @@ conjugator.declarative_present_informal_high = function (infinitive, regular) {
     conjugator.reasons.push("에요 irregular");
     return base + "에요";
   }
+  conjugator.reasons.length = 0; // Clear reasons
   return conjugator.merge(
     conjugator.declarative_present_informal_low(infinitive, regular, true),
     "요"
@@ -1266,6 +1341,10 @@ conjugator.declarative_present_informal_high = function (infinitive, regular) {
 conjugator.declarative_present_informal_high.conjugation = true;
 
 conjugator.declarative_present_formal_low = function (infinitive, regular) {
+  if (conjugator.is_itda_obda(infinitive, regular)) {
+    return conjugator.join(conjugator.base(infinitive, regular), "다");
+  }
+
   if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
     return conjugator.drop_l_and_borrow_padchim(
       conjugator.base(infinitive, regular),
@@ -1286,29 +1365,6 @@ conjugator.declarative_present_formal_high = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "습니다");
 };
 conjugator.declarative_present_formal_high.conjugation = true;
-
-conjugator.declarative_present_honorific_low = function (infinitive, regular) {
-  return conjugator.imperative_present_informal_high(infinitive, regular);
-};
-conjugator.declarative_present_honorific_low.conjugation = true;
-
-conjugator.declarative_present_honorific_high = function (infinitive, regular) {
-  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
-    return conjugator.drop_l(conjugator.base3(infinitive, regular), "십니다");
-  }
-  return conjugator.merge(conjugator.base3(infinitive, regular), "십니다");
-};
-conjugator.declarative_present_honorific_high.conjugation = true;
-
-conjugator.past_base = function (infinitive, regular) {
-  ps = conjugator.declarative_present_informal_low(infinitive, regular, true);
-  if (hangeul.find_vowel_to_append(ps) == "아") {
-    return conjugator.merge(ps, "았");
-  } else {
-    return conjugator.merge(ps, "었");
-  }
-};
-conjugator.past_base.conjugation = true;
 
 conjugator.declarative_past_informal_low = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "어");
@@ -1332,33 +1388,6 @@ conjugator.declarative_past_formal_high = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "습니다");
 };
 conjugator.declarative_past_formal_high.conjugation = true;
-
-conjugator.declarative_past_honorific_low = function (infinitive, regular) {
-  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
-    return conjugator.drop_l(conjugator.base3(infinitive, regular), "셨어요");
-  }
-  return conjugator.merge(conjugator.base3(infinitive, regular), "셨어요");
-};
-conjugator.declarative_past_honorific_low.conjugation = true;
-
-conjugator.declarative_past_honorific_high = function (infinitive, regular) {
-  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
-    return conjugator.drop_l(conjugator.base3(infinitive, regular), "셨습니다");
-  }
-  return conjugator.merge(conjugator.base3(infinitive, regular), "셨습니다");
-};
-conjugator.declarative_past_honorific_high.conjugation = true;
-
-conjugator.future_base = function (infinitive, regular) {
-  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
-    return conjugator.drop_l_and_borrow_padchim(
-      conjugator.base3(infinitive, regular),
-      "을"
-    );
-  }
-  return conjugator.merge(conjugator.base3(infinitive, regular), "을");
-};
-conjugator.future_base.conjugation = true;
 
 conjugator.declarative_future_informal_low = function (infinitive, regular) {
   return conjugator.merge(conjugator.future_base(infinitive, regular), " 거야");
@@ -1385,6 +1414,198 @@ conjugator.declarative_future_formal_high = function (infinitive, regular) {
   );
 };
 conjugator.declarative_future_formal_high.conjugation = true;
+
+// new chia qk tl a v n
+conjugator.determiner_present = function (infinitive, regular) {
+  let stem = conjugator.base(infinitive, regular);
+  if (conjugator.is_itda_obda(infinitive, regular)) {
+    // special conjugators for these forms
+    if (conjugator.is_l_irregular(stem, regular)) {
+      return conjugator.drop_l_and_borrow_padchim(stem, "은");
+    } else {
+      return conjugator.merge(conjugator.base3(infinitive, regular), "은");
+    }
+  } else {
+    if (conjugator.is_l_irregular(stem, regular)) {
+      return conjugator.drop_l(stem, "는");
+    } else {
+      return conjugator.join(stem, "는");
+    }
+  }
+};
+conjugator.determiner_present.conjugation = true;
+
+conjugator.determiner_past = function (infinitive, regular) {
+  if (!conjugator.is_itda_obda(infinitive, regular)) {
+    let stem = conjugator.base(infinitive, regular);
+    if (conjugator.is_l_irregular(stem, regular)) {
+      return conjugator.drop_l_and_borrow_padchim(stem, "은");
+    } else {
+      return conjugator.merge(conjugator.base3(infinitive, regular), "은");
+    }
+  }
+};
+conjugator.determiner_past.conjugation = true;
+
+conjugator.determiner_future = function (infinitive, regular) {
+  let stem = conjugator.base(infinitive, regular);
+  if (conjugator.is_l_irregular(stem, regular)) {
+    return conjugator.drop_l_and_borrow_padchim(stem, "을");
+  } else {
+    return conjugator.merge(conjugator.base3(infinitive, regular), "을");
+  }
+};
+conjugator.determiner_future.conjugation = true;
+
+// new
+conjugator.imperative_informal_low = function (infinitive, regular) {
+  return conjugator.declarative_present_informal_low(infinitive, regular);
+};
+conjugator.imperative_informal_low.conjugation = true;
+
+conjugator.imperative_informal_high = function (infinitive, regular) {
+  return conjugator.declarative_present_informal_high(infinitive, regular);
+};
+conjugator.imperative_informal_high.conjugation = true;
+
+conjugator.imperative_formal_low = function (infinitive, regular) {
+  return conjugator.merge(
+    conjugator.imperative_informal_low(infinitive, regular),
+    "라"
+  );
+};
+conjugator.imperative_formal_low.conjugation = true;
+
+conjugator.imperative_formal_high = function (infinitive, regular) {
+  infinitive = conjugator.maybeStripHonorific(infinitive, regular);
+
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "십시오");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "십시오");
+};
+conjugator.imperative_formal_high.conjugation = true;
+
+// new
+
+conjugator.interrogative_present_informal_low = function (infinitive, regular) {
+  return conjugator.declarative_present_informal_low(infinitive, regular);
+};
+conjugator.interrogative_present_informal_low.conjugation = true;
+
+conjugator.interrogative_present_informal_high = function (
+  infinitive,
+  regular
+) {
+  return conjugator.declarative_present_informal_high(infinitive, regular);
+};
+conjugator.interrogative_present_informal_high.conjugation = true;
+
+conjugator.interrogative_present_formal_low = function (infinitive, regular) {
+  let ending = "느냐";
+  if (!conjugator.is_itda_obda(infinitive, regular)) {
+    ending = "냐";
+  }
+
+  infinitive = conjugator.base(infinitive, regular);
+  if (conjugator.is_l_irregular(infinitive, regular)) {
+    return conjugator.drop_l(infinitive, ending);
+  }
+  return conjugator.merge(infinitive, ending);
+};
+conjugator.interrogative_present_formal_low.conjugation = true;
+
+conjugator.interrogative_present_formal_high = function (infinitive, regular) {
+  infinitive = conjugator.base(infinitive, regular);
+  if (conjugator.is_l_irregular(infinitive, regular)) {
+    return conjugator.drop_l_and_borrow_padchim(infinitive, "습니까");
+  }
+  return conjugator.merge(infinitive, "습니까");
+};
+conjugator.interrogative_present_formal_high.conjugation = true;
+
+conjugator.interrogative_past_informal_low = function (infinitive, regular) {
+  return conjugator.declarative_past_informal_low(infinitive, regular);
+};
+conjugator.interrogative_past_informal_low.conjugation = true;
+
+conjugator.interrogative_past_informal_high = function (infinitive, regular) {
+  return conjugator.declarative_past_informal_high(infinitive, regular);
+};
+conjugator.interrogative_past_informal_high.conjugation = true;
+
+conjugator.interrogative_past_formal_low = function (infinitive, regular) {
+  let ending = "느냐";
+  if (!conjugator.is_itda_obda(infinitive, regular)) {
+    ending = "냐";
+  }
+  return conjugator.merge(conjugator.past_base(infinitive, regular), ending);
+};
+conjugator.interrogative_past_formal_low.conjugation = true;
+
+conjugator.interrogative_past_formal_high = function (infinitive, regular) {
+  return conjugator.merge(conjugator.past_base(infinitive, regular), "습니까");
+};
+conjugator.interrogative_past_formal_high.conjugation = true;
+
+// new
+conjugator.propositive_formal_high = function (infinitive, regular) {
+  infinitive = conjugator.base(infinitive);
+  if (conjugator.is_l_irregular(infinitive, regular)) {
+    return conjugator.drop_l_and_borrow_padchim(
+      conjugator.base3(infinitive, regular),
+      "읍시다"
+    );
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "읍시다");
+};
+conjugator.propositive_formal_high.conjugation = true;
+
+// new
+conjugator.suppositive_informal_high = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "겠어요");
+};
+conjugator.suppositive_informal_high.conjugation = true;
+
+conjugator.suppositive_formal_low = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "겠다");
+};
+conjugator.suppositive_formal_low.conjugation = true;
+
+conjugator.suppositive_formal_high = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "겠습니다");
+};
+conjugator.suppositive_formal_high.conjugation = true;
+
+// old
+conjugator.declarative_present_honorific_low = function (infinitive, regular) {
+  return conjugator.imperative_present_informal_high(infinitive, regular);
+};
+conjugator.declarative_present_honorific_low.conjugation = true;
+
+conjugator.declarative_present_honorific_high = function (infinitive, regular) {
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "십니다");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "십니다");
+};
+conjugator.declarative_present_honorific_high.conjugation = true;
+
+conjugator.declarative_past_honorific_low = function (infinitive, regular) {
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "셨어요");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "셨어요");
+};
+conjugator.declarative_past_honorific_low.conjugation = true;
+
+conjugator.declarative_past_honorific_high = function (infinitive, regular) {
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "셨습니다");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "셨습니다");
+};
+conjugator.declarative_past_honorific_high.conjugation = true;
 
 conjugator.declarative_future_honorific_low = function (infinitive, regular) {
   if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
@@ -1733,6 +1954,7 @@ conjugator.display_conjugations = function (infinitive, regular, callback) {
   callback(out);
 };
 
+//!SECTION
 conjugator.each_conjugation = function (infinitive, regular, callback) {
   infinitive = conjugator.base(infinitive, regular);
   for (conjugation in conjugator) {
