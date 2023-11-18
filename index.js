@@ -13,7 +13,7 @@ const server_port =
 const server_ip_address =
   process.env.IP || process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";
 const FILE_ROUTE = "";
-const CONJUGATE_ROUTE = "/conjugate=";
+const CONJUGATE_ROUTE = "/api/conjugate=";
 
 app.get("/", function (req, res) {
   res.redirect(CONJUGATE_ROUTE + "하다");
