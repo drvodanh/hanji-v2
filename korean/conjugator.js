@@ -1381,9 +1381,9 @@ conjugator.declarative_past_informal_high = function (infinitive, regular) {
   );
 };
 conjugator.declarative_past_informal_high.conjugation = true;
-
+//. -
 conjugator.declarative_past_formal_low = function (infinitive, regular) {
-  return conjugator.merge(conjugator.past_base(infinitive, regular), "다");
+  return conjugator.merge(conjugator.past_base(infinitive, regular), "다가");
 };
 conjugator.declarative_past_formal_low.conjugation = true;
 
