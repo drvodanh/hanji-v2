@@ -6,7 +6,7 @@
   "author": "Akash Eldo",
   "license": "ISC",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "server": "nodemon index.js"
   },
   "repository": {
