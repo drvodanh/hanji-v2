@@ -1368,10 +1368,11 @@ conjugator.declarative_present_formal_high = function (infinitive, regular) {
 };
 conjugator.declarative_present_formal_high.conjugation = true;
 
+//fixme -
 conjugator.declarative_past_informal_low = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "어");
 };
-conjugator.declarative_past_informal_low.conjugation = true;
+conjugator.declarative_past_informal_low.conjugation = false;
 
 conjugator.declarative_past_informal_high = function (infinitive, regular) {
   return conjugator.merge(
