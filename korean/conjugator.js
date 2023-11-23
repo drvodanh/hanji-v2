@@ -1640,13 +1640,14 @@ conjugator.declarative_future_honorific_high = function (infinitive, regular) {
 };
 conjugator.declarative_future_honorific_high.conjugation = true;
 
-conjugator.declarative_future_conditional_informal_low = function (
-  infinitive,
-  regular
-) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "겠어");
-};
-conjugator.declarative_future_conditional_informal_low.conjugation = true;
+//. x29
+// conjugator.declarative_future_conditional_informal_low = function (
+//   infinitive,
+//   regular
+// ) {
+//   return conjugator.merge(conjugator.base(infinitive, regular), "겠어");
+// };
+// conjugator.declarative_future_conditional_informal_low.conjugation = true;
 
 //. x18
 // conjugator.declarative_future_conditional_informal_high = function (
