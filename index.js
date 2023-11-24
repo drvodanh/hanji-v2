@@ -19,7 +19,7 @@ app.get("/", function (req, res) {
   res.redirect(CONJUGATE_ROUTE + "하다");
 });
 
-// Works for both conjugated and infinitive forms
+// Works for both conjugated and  forms
 app.get(CONJUGATE_ROUTE + ":term", function (req, res) {
   let term = req.params.term;
   let regular = true;
