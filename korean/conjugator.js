@@ -1434,7 +1434,7 @@ conjugator.declarative_future_formal_low.conjugation = true;
 //LINK - dinh danh tu
 //todo -  dang sua vi tri
 
-conjugator.determiner_past_dinh_danh_tu = function (infinitive, regular) {
+conjugator.determiner_past_dinh_ngu_qua_khu = function (infinitive, regular) {
   if (!conjugator.is_itda_obda(infinitive, regular)) {
     let stem = conjugator.base(infinitive, regular);
     if (conjugator.is_l_irregular(stem, regular)) {
@@ -1444,9 +1444,12 @@ conjugator.determiner_past_dinh_danh_tu = function (infinitive, regular) {
     }
   }
 };
-conjugator.determiner_past_dinh_danh_tu.conjugation = true;
+conjugator.determiner_past_dinh_ngu_qua_khu.conjugation = true;
 
-conjugator.determiner_present_dinh_danh_tu = function (infinitive, regular) {
+conjugator.determiner_present_dinh_ngu_hien_tai = function (
+  infinitive,
+  regular
+) {
   let stem = conjugator.base(infinitive, regular);
   if (conjugator.is_itda_obda(infinitive, regular)) {
     // special conjugators for these forms
@@ -1463,9 +1466,12 @@ conjugator.determiner_present_dinh_danh_tu = function (infinitive, regular) {
     }
   }
 };
-conjugator.determiner_present_dinh_danh_tu.conjugation = true;
+conjugator.determiner_present_dinh_ngu_hien_tai.conjugation = true;
 
-conjugator.determiner_future_dinh_danh_tu = function (infinitive, regular) {
+conjugator.determiner_future_dinh_ngu_tuong_lai = function (
+  infinitive,
+  regular
+) {
   let stem = conjugator.base(infinitive, regular);
   if (conjugator.is_l_irregular(stem, regular)) {
     return conjugator.drop_l_and_borrow_padchim(stem, "을");
@@ -1473,7 +1479,7 @@ conjugator.determiner_future_dinh_danh_tu = function (infinitive, regular) {
     return conjugator.merge(conjugator.base3(infinitive, regular), "을");
   }
 };
-conjugator.determiner_future_dinh_danh_tu.conjugation = true;
+conjugator.determiner_future_dinh_ngu_tuong_lai.conjugation = true;
 
 //. phia tren ok
 
