@@ -1243,18 +1243,17 @@ conjugator.declarative_past_informal_high = function (infinitive, regular) {
 };
 conjugator.declarative_past_informal_high.conjugation = true;
 
-//chia 어 아 qua khu them 다
-conjugator.declarative_past_formal_low_a1 = function (infinitive, regular) {
-  return conjugator.merge(conjugator.past_base(infinitive, regular), "다");
-};
-conjugator.declarative_past_formal_low_a1.conjugation = true;
-
 // chia qua khu 습니다
 conjugator.declarative_past_formal_high = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "습니다");
 };
 conjugator.declarative_past_formal_high.conjugation = true;
 
+//chia 어 아 qua khu them 다
+conjugator.declarative_past_formal_low_a1 = function (infinitive, regular) {
+  return conjugator.merge(conjugator.past_base(infinitive, regular), "다");
+};
+conjugator.declarative_past_formal_low_a1.conjugation = true;
 // chia 습니까 qua khu
 conjugator.interrogative_past_formal_high = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "습니까?");
