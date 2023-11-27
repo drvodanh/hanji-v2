@@ -1435,13 +1435,11 @@ conjugator.declarative_future_formal_low.conjugation = true;
 //todo -  dang sua vi tri
 
 conjugator.determiner_past_dinh_ngu_qua_khu = function (infinitive, regular) {
-  if (!conjugator.is_itda_obda(infinitive, regular)) {
-    let stem = conjugator.base(infinitive, regular);
-    if (conjugator.is_l_irregular(stem, regular)) {
-      return conjugator.drop_l_and_borrow_padchim(stem, "은");
-    } else {
-      return conjugator.merge(conjugator.base3(infinitive, regular), "은");
-    }
+  let stem = conjugator.base(infinitive, regular);
+  if (conjugator.is_l_irregular(stem, regular)) {
+    return conjugator.drop_l_and_borrow_padchim(stem, "은");
+  } else {
+    return conjugator.merge(conjugator.base3(infinitive, regular), "은");
   }
 };
 conjugator.determiner_past_dinh_ngu_qua_khu.conjugation = true;
@@ -1467,6 +1465,20 @@ conjugator.determiner_present_dinh_ngu_hien_tai = function (
   }
 };
 conjugator.determiner_present_dinh_ngu_hien_tai.conjugation = true;
+
+conjugator.adjective = function (infinitive, regular) {
+  let stem = conjugator.base3(infinitive, regular);
+  if (
+    stem.charAt(stem.length - 1) == "있" ||
+    stem.charAt(stem.length - 1) == "없"
+  ) {
+    // special conjugations for these forms
+    return conjugator.merge(stem, "는");
+  } else {
+    return conjugator.merge(stem, "은");
+  }
+};
+conjugator.adjective.conjugation = true;
 
 conjugator.determiner_future_dinh_ngu_tuong_lai = function (
   infinitive,
