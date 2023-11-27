@@ -184,6 +184,30 @@ conjugator.merge = function (x, y, noReasons = false) {
   return response;
 };
 
+//. custom
+conjugator.mergeC = function (x, y, noReasons = false) {
+  var response = null;
+  conjugator.merge_rules.forEach(function (rule) {
+    output = rule(x, y);
+    if (output) {
+      if (!noReasons) {
+        conjugator.reasons.push(
+          (output[0] ? output[0] : "") +
+            " (" +
+            x +
+            " + " +
+            y +
+            " -> " +
+            output[1] +
+            ")"
+        );
+      }
+      response = output[1];
+    }
+  });
+  return response;
+};
+//.
 conjugator.both_regular_and_irregular = {
   일: true,
   곱: true,
@@ -1243,11 +1267,11 @@ conjugator.qua_khu_v_a_van_viet.conjugation = true;
 
 //!SECTION
 //. custom check patchim
-conjugator.qua_khu_n_van_viet = function (infinitive, regular) {
+conjugator.qua_khu_n_van_viet = function (infinitive) {
   if (hasPatchim(infinitive.toString())) {
-    return conjugator.merge(conjugator.base(infinitive, regular), "이었다");
+    return conjugator.mergeC(infinitive, "이었다.");
   }
-  return conjugator.merge(conjugator.base(infinitive, regular), "였다");
+  return conjugator.mergeC(infinitive, "였다.");
 };
 conjugator.qua_khu_n_van_viet.conjugation = true;
 //. custom
