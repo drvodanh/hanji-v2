@@ -1341,7 +1341,7 @@ conjugator.qua_khu_n_lich_su.conjugation = true;
 
 //!SECTION pass
 //LINK - hien tai
-//todo -  dang vi tri
+//todo -  ok
 conjugator.hien_tai_v_van_viet = function (infinitive, regular) {
   if (conjugator.is_itda_obda(infinitive, regular)) {
     return conjugator.join(conjugator.base(infinitive, regular), "다");
@@ -1514,10 +1514,10 @@ conjugator.future_base = function (infinitive, regular) {
 conjugator.future_base.conjugation = false;
 
 // tuong lai 거야 xuong xa than mat
-conjugator.declarative_future_informal_low = function (infinitive, regular) {
+conjugator.tuong_lai_k_lich_su = function (infinitive, regular) {
   return conjugator.merge(conjugator.future_base(infinitive, regular), " 거야");
 };
-conjugator.declarative_future_informal_low.conjugation = true;
+conjugator.tuong_lai_k_lich_su.conjugation = true;
 
 // tuong lai 을 거에요
 conjugator.declarative_future_informal_high = function (infinitive, regular) {
