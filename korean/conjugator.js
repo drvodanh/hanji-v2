@@ -1432,7 +1432,7 @@ conjugator.hien_tai_v_a_k_lich_su = function (
 conjugator.hien_tai_v_a_k_lich_su.conjugation = true;
 
 // chia 어 아 hien tai them 요 / 에요
-conjugator.hien_tai_v_n_thong_thuong = function (infinitive, regular) {
+conjugator.hien_tai_v_a_thong_thuong = function (infinitive, regular) {
   base = conjugator.base2(infinitive, regular);
   if (
     (base.charAt(base.length - 1) == "이" &&
@@ -1449,7 +1449,7 @@ conjugator.hien_tai_v_n_thong_thuong = function (infinitive, regular) {
     "요"
   );
 };
-conjugator.hien_tai_v_n_thong_thuong.conjugation = true;
+conjugator.hien_tai_v_a_thong_thuong.conjugation = true;
 
 // chia hien tai 습니다
 conjugator.hien_tai_v_a_lich_su = function (infinitive, regular) {
