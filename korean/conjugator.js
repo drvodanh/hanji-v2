@@ -1283,6 +1283,18 @@ conjugator.qua_khu_v_a_k_lich_su = function (infinitive, regular) {
 };
 conjugator.qua_khu_v_a_k_lich_su.conjugation = true;
 
+//!SECTION
+//. custom check patchim
+conjugator.qua_khu_n_k_lich_su = function (infinitive) {
+  if (hasPatchim(infinitive.toString())) {
+    return conjugator.mergeC(infinitive, "이었어.");
+  }
+  return conjugator.mergeC(infinitive, "였어.");
+};
+conjugator.qua_khu_n_k_lich_su.conjugation = true;
+//. custom
+
+//!SECTION
 // chia 어 아 qua khu them 요
 conjugator.qua_khu_v_a_thong_thuong = function (infinitive, regular) {
   return conjugator.merge(
@@ -1292,17 +1304,37 @@ conjugator.qua_khu_v_a_thong_thuong = function (infinitive, regular) {
 };
 conjugator.qua_khu_v_a_thong_thuong.conjugation = true;
 
+//!SECTION
+//. custom check patchim
+conjugator.qua_khu_n_thong_thuong = function (infinitive) {
+  if (hasPatchim(infinitive.toString())) {
+    return conjugator.mergeC(infinitive, "이었어요.");
+  }
+  return conjugator.mergeC(infinitive, "였어요.");
+};
+conjugator.qua_khu_n_thong_thuong.conjugation = true;
+//. custom
+
+//!SECTION
+
 // chia qua khu 습니다
 conjugator.qua_khu_v_a_lich_su = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "습니다");
 };
 conjugator.qua_khu_v_a_lich_su.conjugation = true;
 
-// chia 습니까 qua khu
-conjugator.interrogative_past_formal_high = function (infinitive, regular) {
-  return conjugator.merge(conjugator.past_base(infinitive, regular), "습니까?");
+//!SECTION
+//. custom check patchim
+conjugator.qua_khu_n_lich_su = function (infinitive) {
+  if (hasPatchim(infinitive.toString())) {
+    return conjugator.mergeC(infinitive, "이었습니다.");
+  }
+  return conjugator.mergeC(infinitive, "였습니다.");
 };
-conjugator.interrogative_past_formal_high.conjugation = true;
+conjugator.qua_khu_n_lich_su.conjugation = true;
+//. custom
+
+//!SECTION
 
 //. phia tren ok
 ////////////////////
