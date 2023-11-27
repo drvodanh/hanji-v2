@@ -1486,6 +1486,15 @@ conjugator.hien_tai_v_a_lich_su = function (infinitive, regular) {
 };
 conjugator.hien_tai_v_a_lich_su.conjugation = true;
 
+//. custom check patchim
+conjugator.hien_tai_n_lich_su = function (infinitive) {
+  return conjugator.mergeC(infinitive, "입니다");
+};
+conjugator.hien_tai_n_lich_su.conjugation = true;
+//. custom
+
+//!SECTION
+
 //. phia tren ok
 
 //!SECTION pass
