@@ -1269,9 +1269,9 @@ conjugator.qua_khu_v_a_van_viet.conjugation = true;
 //. custom check patchim
 conjugator.qua_khu_n_van_viet = function (infinitive) {
   if (hasPatchim(infinitive.toString())) {
-    return conjugator.mergeC(infinitive, "이었다.");
+    return conjugator.mergeC(infinitive, "이었다");
   }
-  return conjugator.mergeC(infinitive, "였다.");
+  return conjugator.mergeC(infinitive, "였다");
 };
 conjugator.qua_khu_n_van_viet.conjugation = true;
 //. custom
@@ -1287,9 +1287,9 @@ conjugator.qua_khu_v_a_k_lich_su.conjugation = true;
 //. custom check patchim
 conjugator.qua_khu_n_k_lich_su = function (infinitive) {
   if (hasPatchim(infinitive.toString())) {
-    return conjugator.mergeC(infinitive, "이었어.");
+    return conjugator.mergeC(infinitive, "이었어");
   }
-  return conjugator.mergeC(infinitive, "였어.");
+  return conjugator.mergeC(infinitive, "였어");
 };
 conjugator.qua_khu_n_k_lich_su.conjugation = true;
 //. custom
@@ -1308,9 +1308,9 @@ conjugator.qua_khu_v_a_thong_thuong.conjugation = true;
 //. custom check patchim
 conjugator.qua_khu_n_thong_thuong = function (infinitive) {
   if (hasPatchim(infinitive.toString())) {
-    return conjugator.mergeC(infinitive, "이었어요.");
+    return conjugator.mergeC(infinitive, "이었어요");
   }
-  return conjugator.mergeC(infinitive, "였어요.");
+  return conjugator.mergeC(infinitive, "였어요");
 };
 conjugator.qua_khu_n_thong_thuong.conjugation = true;
 //. custom
@@ -1327,9 +1327,9 @@ conjugator.qua_khu_v_a_lich_su.conjugation = true;
 //. custom check patchim
 conjugator.qua_khu_n_lich_su = function (infinitive) {
   if (hasPatchim(infinitive.toString())) {
-    return conjugator.mergeC(infinitive, "이었습니다.");
+    return conjugator.mergeC(infinitive, "이었습니다");
   }
-  return conjugator.mergeC(infinitive, "였습니다.");
+  return conjugator.mergeC(infinitive, "였습니다");
 };
 conjugator.qua_khu_n_lich_su.conjugation = true;
 //. custom
