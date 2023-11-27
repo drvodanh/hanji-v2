@@ -1228,32 +1228,32 @@ conjugator.past_base = function (infinitive, regular) {
 };
 conjugator.past_base.conjugation = false;
 
+//chia 어 아 qua khu them 다
+conjugator.qua_khu_v_a_van_viet = function (infinitive, regular) {
+  return conjugator.merge(conjugator.past_base(infinitive, regular), "다");
+};
+conjugator.qua_khu_v_a_van_viet.conjugation = true;
 // chia 어 아 qua khu
-conjugator.declarative_past_informal_low = function (infinitive, regular) {
+conjugator.qua_khu_v_a_k_lich_su = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "어");
 };
-conjugator.declarative_past_informal_low.conjugation = true;
+conjugator.qua_khu_v_a_k_lich_su.conjugation = true;
 
 // chia 어 아 qua khu them 요
-conjugator.declarative_past_informal_high = function (infinitive, regular) {
+conjugator.qua_khu_v_a_thong_thuong = function (infinitive, regular) {
   return conjugator.merge(
-    conjugator.declarative_past_informal_low(infinitive, regular),
+    conjugator.qua_khu_v_a_k_lich_su(infinitive, regular),
     "요"
   );
 };
-conjugator.declarative_past_informal_high.conjugation = true;
+conjugator.qua_khu_v_a_thong_thuong.conjugation = true;
 
 // chia qua khu 습니다
-conjugator.declarative_past_formal_high = function (infinitive, regular) {
+conjugator.qua_khu_v_a_lich_su = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "습니다");
 };
-conjugator.declarative_past_formal_high.conjugation = true;
+conjugator.qua_khu_v_a_lich_su.conjugation = true;
 
-//chia 어 아 qua khu them 다
-conjugator.declarative_past_formal_low_a1 = function (infinitive, regular) {
-  return conjugator.merge(conjugator.past_base(infinitive, regular), "다");
-};
-conjugator.declarative_past_formal_low_a1.conjugation = true;
 // chia 습니까 qua khu
 conjugator.interrogative_past_formal_high = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "습니까?");
@@ -1431,7 +1431,7 @@ conjugator.declarative_future_formal_low.conjugation = true;
 
 //!SECTION pass
 //LINK - dinh danh tu
-//todo -  dang sua vi tri
+//todo -  ok
 
 conjugator.dinh_ngu_qua_khu = function (infinitive, regular) {
   let stem = conjugator.base(infinitive, regular);
