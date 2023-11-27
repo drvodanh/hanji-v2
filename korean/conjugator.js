@@ -1431,6 +1431,18 @@ conjugator.hien_tai_v_a_k_lich_su = function (
 };
 conjugator.hien_tai_v_a_k_lich_su.conjugation = true;
 
+//. custom check patchim
+conjugator.hien_tai_n_k_lich_su = function (infinitive) {
+  if (hasPatchim(infinitive.toString())) {
+    return conjugator.mergeC(infinitive, "이야");
+  }
+  return conjugator.mergeC(infinitive, "야");
+};
+conjugator.hien_tai_n_k_lich_su.conjugation = true;
+//. custom
+
+//!SECTION
+
 // chia 어 아 hien tai them 요 / 에요
 conjugator.hien_tai_v_a_thong_thuong = function (infinitive, regular) {
   base = conjugator.base2(infinitive, regular);
