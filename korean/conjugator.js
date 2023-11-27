@@ -1342,6 +1342,25 @@ conjugator.qua_khu_n_lich_su.conjugation = true;
 //!SECTION pass
 //LINK - hien tai
 //todo -  dang vi tri
+conjugator.hien_tai_v_van_viet = function (infinitive, regular) {
+  if (conjugator.is_itda_obda(infinitive, regular)) {
+    return conjugator.join(conjugator.base(infinitive, regular), "다");
+  }
+
+  if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
+    return conjugator.drop_l_and_borrow_padchim(
+      conjugator.base(infinitive, regular),
+      "는다"
+    );
+  }
+  return conjugator.merge(conjugator.base(infinitive, regular), "는다");
+};
+conjugator.hien_tai_v_van_viet.conjugation = true;
+
+conjugator.hien_tai_a_van_viet = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "는다");
+};
+conjugator.hien_tai_a_van_viet.conjugation = true;
 // chia 어 아 hien tai
 conjugator.hien_tai_v_a_k_lich_su = function (
   infinitive,
@@ -1443,26 +1462,6 @@ conjugator.hien_tai_v_a_lich_su = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "습니다");
 };
 conjugator.hien_tai_v_a_lich_su.conjugation = true;
-
-conjugator.hien_tai_v_van_viet = function (infinitive, regular) {
-  if (conjugator.is_itda_obda(infinitive, regular)) {
-    return conjugator.join(conjugator.base(infinitive, regular), "다");
-  }
-
-  if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
-    return conjugator.drop_l_and_borrow_padchim(
-      conjugator.base(infinitive, regular),
-      "는다"
-    );
-  }
-  return conjugator.merge(conjugator.base(infinitive, regular), "는다");
-};
-conjugator.hien_tai_v_van_viet.conjugation = true;
-
-conjugator.hien_tai_a_van_viet = function (infinitive, regular) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "다");
-};
-conjugator.hien_tai_a_van_viet.conjugation = true;
 
 //. phia tren ok
 
