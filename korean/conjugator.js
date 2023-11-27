@@ -1,5 +1,10 @@
 // vim: set ts=4 sw=4 expandtab
 // (C) 2010 Dan Bravender - licensed under the AGPL 3.0
+const Hangul = require("hangul-js");
+
+function hasPatchim(word) {
+  return Hangul.endsWithConsonant(word);
+}
 
 try {
   var hangeul = require("./hangeul"),
@@ -145,6 +150,7 @@ conjugator.merge_rules = [
     실: true,
     시: true,
   }),
+
   // default rule
   function (x, y) {
     return ["Ghép", x + y];
@@ -1192,6 +1198,7 @@ conjugator.add_honorific = function (infinitive, regular) {
     return conjugator.merge(conjugator.base3(infinitive, regular), "시");
   }
 };
+
 /**
  * Remove 시 from words like 계시다 and 드시다 that should always be in honorific form.
  * This is useful for conjugations like declarative present informal high.
@@ -1233,6 +1240,19 @@ conjugator.qua_khu_v_a_van_viet = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "다");
 };
 conjugator.qua_khu_v_a_van_viet.conjugation = true;
+
+//!SECTION
+//. custom check patchim
+conjugator.qua_khu_n_van_viet = function (infinitive, regular) {
+  if (hasPatchim(infinitive.toString())) {
+    return conjugator.merge(conjugator.base(infinitive, regular), "이었다");
+  }
+  return conjugator.merge(conjugator.base(infinitive, regular), "였다");
+};
+conjugator.qua_khu_n_van_viet.conjugation = true;
+//. custom
+
+//!SECTION
 // chia 어 아 qua khu
 conjugator.qua_khu_v_a_k_lich_su = function (infinitive, regular) {
   return conjugator.merge(conjugator.past_base(infinitive, regular), "어");
