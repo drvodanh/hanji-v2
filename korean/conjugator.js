@@ -1358,7 +1358,7 @@ conjugator.hien_tai_v_van_viet = function (infinitive, regular) {
 conjugator.hien_tai_v_van_viet.conjugation = true;
 
 conjugator.hien_tai_a_van_viet = function (infinitive, regular) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "는다");
+  return conjugator.merge(conjugator.base(infinitive, regular), "다");
 };
 conjugator.hien_tai_a_van_viet.conjugation = true;
 // chia 어 아 hien tai
