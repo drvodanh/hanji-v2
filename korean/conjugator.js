@@ -1250,7 +1250,7 @@ conjugator.maybeStripHonorific = function (infinitive, regular) {
 //todo -  da sua vi tri
 // quy tac 어 아 qua khu
 conjugator.past_base = function (infinitive, regular) {
-  ps = conjugator.declarative_present_informal_low(infinitive, regular, true);
+  ps = conjugator.hien_tai_v_a_k_lich_su(infinitive, regular, true);
   if (hangeul.find_vowel_to_append(ps) == "아") {
     return conjugator.merge(ps, "았");
   } else {
@@ -1343,7 +1343,7 @@ conjugator.qua_khu_n_lich_su.conjugation = true;
 //LINK - hien tai
 //todo -  dang vi tri
 // chia 어 아 hien tai
-conjugator.declarative_present_informal_low = function (
+conjugator.hien_tai_v_a_k_lich_su = function (
   infinitive,
   regular,
   further_use
@@ -1410,10 +1410,10 @@ conjugator.declarative_present_informal_low = function (
   }
   return conjugator.merge(infinitive, hangeul.find_vowel_to_append(infinitive));
 };
-conjugator.declarative_present_informal_low.conjugation = true;
+conjugator.hien_tai_v_a_k_lich_su.conjugation = true;
 
 // chia 어 아 hien tai them 요 / 에요
-conjugator.declarative_present_informal_high = function (infinitive, regular) {
+conjugator.hien_tai_v_n_thong_thuong = function (infinitive, regular) {
   base = conjugator.base2(infinitive, regular);
   if (
     (base.charAt(base.length - 1) == "이" &&
@@ -1426,14 +1426,14 @@ conjugator.declarative_present_informal_high = function (infinitive, regular) {
   }
   conjugator.reasons.length = 0; // Clear reasons
   return conjugator.merge(
-    conjugator.declarative_present_informal_low(infinitive, regular, true),
+    conjugator.hien_tai_v_a_k_lich_su(infinitive, regular, true),
     "요"
   );
 };
-conjugator.declarative_present_informal_high.conjugation = true;
+conjugator.hien_tai_v_n_thong_thuong.conjugation = true;
 
 // chia hien tai 습니다
-conjugator.declarative_present_formal_high = function (infinitive, regular) {
+conjugator.hien_tai_v_a_lich_su = function (infinitive, regular) {
   if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
     return conjugator.drop_l_and_borrow_padchim(
       conjugator.base(infinitive, regular),
@@ -1442,19 +1442,27 @@ conjugator.declarative_present_formal_high = function (infinitive, regular) {
   }
   return conjugator.merge(conjugator.base(infinitive, regular), "습니다");
 };
-conjugator.declarative_present_formal_high.conjugation = true;
+conjugator.hien_tai_v_a_lich_su.conjugation = true;
 
-// chia hien tai 습니까?
-conjugator.declarative_present_formal_high_Q = function (infinitive, regular) {
+conjugator.hien_tai_v_van_viet = function (infinitive, regular) {
+  if (conjugator.is_itda_obda(infinitive, regular)) {
+    return conjugator.join(conjugator.base(infinitive, regular), "다");
+  }
+
   if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
     return conjugator.drop_l_and_borrow_padchim(
       conjugator.base(infinitive, regular),
-      "습니까?"
+      "는다"
     );
   }
-  return conjugator.merge(conjugator.base(infinitive, regular), "습니까?");
+  return conjugator.merge(conjugator.base(infinitive, regular), "는다");
 };
-conjugator.declarative_present_formal_high_Q.conjugation = true;
+conjugator.hien_tai_v_van_viet.conjugation = true;
+
+conjugator.hien_tai_a_van_viet = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "다");
+};
+conjugator.hien_tai_a_van_viet.conjugation = true;
 
 //. phia tren ok
 
@@ -1783,7 +1791,7 @@ conjugator.declarative_past_formal_low.conjugation = true;
 
 conjugator.imperative_formal_low = function (infinitive, regular) {
   return conjugator.merge(
-    conjugator.declarative_present_informal_low(infinitive, regular),
+    conjugator.hien_tai_v_a_k_lich_su(infinitive, regular),
     "라"
   );
 };
@@ -1832,21 +1840,6 @@ conjugator.adjective.conjugation = true;
 
 // chia 라
 
-conjugator.declarative_present_formal_low = function (infinitive, regular) {
-  if (conjugator.is_itda_obda(infinitive, regular)) {
-    return conjugator.join(conjugator.base(infinitive, regular), "다");
-  }
-
-  if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
-    return conjugator.drop_l_and_borrow_padchim(
-      conjugator.base(infinitive, regular),
-      "는다"
-    );
-  }
-  return conjugator.merge(conjugator.base(infinitive, regular), "는다");
-};
-conjugator.declarative_present_formal_low.conjugation = true;
-
 //. - add new conjugations
 conjugator.phai_lam_gi = function (infinitive, regular) {
   base = conjugator.base2(infinitive, regular);
@@ -1860,7 +1853,7 @@ conjugator.phai_lam_gi = function (infinitive, regular) {
     return base + "에요";
   }
   return conjugator.merge(
-    conjugator.declarative_present_informal_low(infinitive, regular, true),
+    conjugator.hien_tai_v_a_k_lich_su(infinitive, regular, true),
     "야 하다"
   );
 };
