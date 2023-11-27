@@ -1068,12 +1068,12 @@ conjugator.join = function (x, y) {
 //!section
 
 conjugator.verb_types = {
-  "ㅅ 불규칙 동사 (bất quy tắc)": conjugator.is_s_irregular,
-  "ㄹ 불규칙 동사 (bất quy tắc)": conjugator.is_l_irregular,
-  "르 불규칙 동사 (bất quy tắc)": conjugator.is_l_euh_irregular,
-  "ㅎ 불규칙 동사 (bất quy tắc)": conjugator.is_h_irregular,
-  "ㅂ 불규칙 동사 (bất quy tắc)": conjugator.is_p_irregular,
-  "ㄷ 불규칙 동사 (bất quy tắc)": conjugator.is_d_irregular,
+  "ㅅ 불규칙 동사 (Bất quy tắc)": conjugator.is_s_irregular,
+  "ㄹ 불규칙 동사 (Bất quy tắc)": conjugator.is_l_irregular,
+  "르 불규칙 동사 (Bất quy tắc)": conjugator.is_l_euh_irregular,
+  "ㅎ 불규칙 동사 (Bất quy tắc)": conjugator.is_h_irregular,
+  "ㅂ 불규칙 동사 (Bất quy tắc)": conjugator.is_p_irregular,
+  "ㄷ 불규칙 동사 (Bất quy tắc)": conjugator.is_d_irregular,
 };
 
 conjugator.verb_type = function (infinitive, regular) {
@@ -1123,7 +1123,7 @@ conjugator.base2 = function (infinitive, regular) {
   if (conjugator.is_h_irregular(infinitive, regular)) {
     new_infinitive = conjugator.merge(x, "이", true);
     conjugator.reasons.push(
-      "bất quy tắc ㅎ (" + infinitive + " -> " + new_infinitive + ")"
+      "Bất quy tắc ㅎ (" + infinitive + " -> " + new_infinitive + ")"
     );
   } else if (conjugator.is_p_irregular(infinitive, regular)) {
     // only some verbs get ㅗ (highly irregular)
@@ -1137,7 +1137,7 @@ conjugator.base2 = function (infinitive, regular) {
     }
     new_infinitive = conjugator.merge(x, hangeul.join("ᄋ", new_vowel), true);
     conjugator.reasons.push(
-      "bất quy tắc ㅂ (" + infinitive + " -> " + new_infinitive + ")"
+      "Bất quy tắc ㅂ (" + infinitive + " -> " + new_infinitive + ")"
     );
   } else if (conjugator.is_d_irregular(infinitive, regular)) {
     new_infinitive = new hangeul.Geulja(
@@ -1150,13 +1150,13 @@ conjugator.base2 = function (infinitive, regular) {
     );
     new_infinitive.original_padchim = "ᆮ";
     conjugator.reasons.push(
-      "bất quy tắc ㄷ  (" + infinitive + " -> " + new_infinitive + ")"
+      "Bất quy tắc ㄷ  (" + infinitive + " -> " + new_infinitive + ")"
     );
   } else if (conjugator.is_s_irregular(infinitive, regular)) {
     new_infinitive = new hangeul.Geulja(x);
     new_infinitive.hidden_padchim = true;
     conjugator.reasons.push(
-      "bất quy tắc ㅅ (" +
+      "Bất quy tắc ㅅ (" +
         infinitive +
         " -> " +
         new_infinitive +
@@ -1376,7 +1376,7 @@ conjugator.hien_tai_v_a_k_lich_su = function (
       infinitive == "아니" ||
       (regular && infinitive.charAt(infinitive.length - 1) == "이"))
   ) {
-    conjugator.reasons.push("bất quy tắc 야");
+    conjugator.reasons.push("Bất quy tắc 야");
     return infinitive + "야";
   }
   // 르 irregular
@@ -1402,7 +1402,7 @@ conjugator.hien_tai_v_a_k_lich_su = function (
           hangeul.vowel(hangeul.find_vowel_to_append(new_base))
         );
       conjugator.reasons.push(
-        "bất quy tắc + " + infinitive + " -> " + new_base
+        "Bất quy tắc + " + infinitive + " -> " + new_base
       );
       return infinitive + "러";
     } else if (
@@ -1412,13 +1412,13 @@ conjugator.hien_tai_v_a_k_lich_su = function (
     ) {
       new_base += "라";
       conjugator.reasons.push(
-        "bất quy tắc 르 [" + infinitive + " -> " + new_base + "]"
+        "Bất quy tắc 르 [" + infinitive + " -> " + new_base + "]"
       );
       return new_base;
     } else {
       new_base += "러";
       conjugator.reasons.push(
-        "bất quy tắc 르 [" + infinitive + " -> " + new_base + "]"
+        "Bất quy tắc 르 [" + infinitive + " -> " + new_base + "]"
       );
       return new_base;
     }
@@ -1452,7 +1452,7 @@ conjugator.hien_tai_v_a_thong_thuong = function (infinitive, regular) {
       !(base in conjugator.regular_ees)) ||
     base == "아니"
   ) {
-    conjugator.reasons.push("bất quy tắc 에요");
+    conjugator.reasons.push("Bất quy tắc 에요");
     return base + "에요";
   }
   conjugator.reasons.length = 0; // Clear reasons
@@ -1463,6 +1463,17 @@ conjugator.hien_tai_v_a_thong_thuong = function (infinitive, regular) {
 };
 conjugator.hien_tai_v_a_thong_thuong.conjugation = true;
 
+//. custom check patchim
+conjugator.hien_tai_n_thong_thuong = function (infinitive) {
+  if (hasPatchim(infinitive.toString())) {
+    return conjugator.mergeC(infinitive, "이에요");
+  }
+  return conjugator.mergeC(infinitive, "에요");
+};
+conjugator.hien_tai_n_thong_thuong.conjugation = true;
+//. custom
+
+//!SECTION
 // chia hien tai 습니다
 conjugator.hien_tai_v_a_lich_su = function (infinitive, regular) {
   if (conjugator.is_l_irregular(conjugator.base(infinitive), regular)) {
@@ -1860,7 +1871,7 @@ conjugator.phai_lam_gi = function (infinitive, regular) {
       !(base in conjugator.regular_ees)) ||
     base == "아니"
   ) {
-    conjugator.reasons.push("bất quy tắc 에요");
+    conjugator.reasons.push("Bất quy tắc 에요");
     return base + "에요";
   }
   return conjugator.merge(
