@@ -1480,6 +1480,20 @@ conjugator.adjective = function (infinitive, regular) {
 };
 conjugator.adjective.conjugation = true;
 
+conjugator.dinh_ngu_tinh_tu_hien_tai = function (infinitive, regular) {
+  let stem = conjugator.base3(infinitive, regular);
+  if (
+    stem.charAt(stem.length - 1) == "있" ||
+    stem.charAt(stem.length - 1) == "없"
+  ) {
+    // special conjugations for these forms
+    return conjugator.merge(stem, "는");
+  } else {
+    return conjugator.merge(stem, "은");
+  }
+};
+conjugator.dinh_ngu_tinh_tu_hien_tai.conjugation = true;
+
 conjugator.determiner_future_dinh_ngu_tuong_lai = function (
   infinitive,
   regular
