@@ -1499,7 +1499,7 @@ conjugator.hien_tai_n_lich_su.conjugation = true;
 
 //!SECTION pass
 //LINK - tuong lai
-//todo -  dang sua vi tri
+//todo -  ok
 
 // chia 을 tuong lai
 conjugator.future_base = function (infinitive, regular) {
@@ -1625,6 +1625,26 @@ conjugator.dinh_ngu_tuong_lai.conjugation = true;
 //. phia tren ok
 
 //!SECTION pass
+//LINK - se
+//todo -  dang sua vi tri
+conjugator.se_lam_gi_do = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "겠다");
+};
+conjugator.se_lam_gi_do.conjugation = true;
+
+conjugator.se_lam_gi_do_thong_thuong = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "겠어요");
+};
+conjugator.se_lam_gi_do_thong_thuong.conjugation = true;
+
+conjugator.se_lam_gi_do_lich_su = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "겠습니다");
+};
+conjugator.se_lam_gi_do_lich_su.conjugation = true;
+
+//. phia tren ok
+
+//!SECTION pass
 //LINK - se, khuyen nhu, yeu cau, menh lenh
 //todo -  dang sua vi tri
 
@@ -1681,24 +1701,6 @@ conjugator.de_nghi_ru_re_cung_lam_gi_do = function (infinitive, regular) {
   return conjugator.merge(conjugator.base3(infinitive, regular), "읍시다");
 };
 conjugator.de_nghi_ru_re_cung_lam_gi_do.conjugation = true;
-
-conjugator.se_lam_gi_do = function (infinitive, regular) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "겠다");
-};
-conjugator.se_lam_gi_do.conjugation = true;
-
-conjugator.se_lam_gi_do_chac_la = function (infinitive, regular) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "겠어요");
-};
-conjugator.se_lam_gi_do_chac_la.conjugation = true;
-
-conjugator.se_lam_gi_do_chac_la_trang_trong_hon = function (
-  infinitive,
-  regular
-) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "겠습니다");
-};
-conjugator.se_lam_gi_do_chac_la_trang_trong_hon.conjugation = true;
 
 ///////////////
 
