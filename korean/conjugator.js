@@ -1520,27 +1520,35 @@ conjugator.tuong_lai_k_lich_su = function (infinitive, regular) {
 conjugator.tuong_lai_k_lich_su.conjugation = true;
 
 // tuong lai 을 거에요
-conjugator.declarative_future_informal_high = function (infinitive, regular) {
+conjugator.tuong_lai_thong_thuong = function (infinitive, regular) {
   return conjugator.merge(
     conjugator.future_base(infinitive, regular),
     " 거예요"
   );
 };
-conjugator.declarative_future_informal_high.conjugation = true;
+conjugator.tuong_lai_thong_thuong.conjugation = true;
 
+//. custom check patchim
+conjugator.phong_doan_n_thong_thuong = function (infinitive) {
+  return conjugator.mergeC(infinitive, "일 거예요");
+};
+conjugator.phong_doan_n_thong_thuong.conjugation = true;
+//. custom
+
+//!SECTION
+
+conjugator.k_lich_su_거다 = function (infinitive, regular) {
+  return conjugator.merge(conjugator.future_base(infinitive, regular), " 거다");
+};
+conjugator.k_lich_su_거다.conjugation = true;
 // 을 겁니다 Lưu ý  cách nói và viết ㄹ/을 겁니다 cùng nghĩa như 을 거예요. Và thường được phái mạnh sử dụng nhiều hơn, nhất là trong môi trường doanh nghiệp.
-conjugator.declarative_future_formal_high = function (infinitive, regular) {
+conjugator.phong_doan_을_겁니다 = function (infinitive, regular) {
   return conjugator.merge(
     conjugator.future_base(infinitive, regular),
     " 겁니다"
   );
 };
-conjugator.declarative_future_formal_high.conjugation = true;
-
-conjugator.declarative_future_formal_low = function (infinitive, regular) {
-  return conjugator.merge(conjugator.future_base(infinitive, regular), " 거다");
-};
-conjugator.declarative_future_formal_low.conjugation = true;
+conjugator.phong_doan_을_겁니다.conjugation = true;
 
 ///////////////////
 
