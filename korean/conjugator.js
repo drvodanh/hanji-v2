@@ -1649,6 +1649,28 @@ conjugator.se_lam_gi_do_lich_su.conjugation = true;
 //todo -  dang sua vi tri
 
 //십시오 Sử dụng khi khuyên nhủ, khuyên bảo hay yêu cầu, ra lệnh đối với người nghe, mang tính trang trọng, chính thức (공식적). Tùy từng câu văn mà các bạn có thể dịch là “hãy”,“xin mời”, "xin hãy",...
+conjugator.ra_lenh_k_lich_su = function (infinitive, regular) {
+  return conjugator.merge(
+    conjugator.hien_tai_v_a_k_lich_su(infinitive, regular),
+    "라"
+  );
+};
+conjugator.ra_lenh_k_lich_su.conjugation = true;
+
+conjugator.ra_lenh_lich_su_cua_라 = function (infinitive, regular) {
+  infinitive = conjugator.maybeStripHonorific(infinitive, regular);
+
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "십시오");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "십시오");
+};
+conjugator.ra_lenh_lich_su_cua_라.conjugation = true;
+
+conjugator.ra_lenh_k_lich_su_2 = function (infinitive, regular) {
+  return conjugator.hien_tai_v_a_k_lich_su(infinitive, regular);
+};
+conjugator.ra_lenh_k_lich_su_2.conjugation = true;
 
 conjugator.imperative_present_informal_high = function (infinitive, regular) {
   if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
@@ -1657,38 +1679,13 @@ conjugator.imperative_present_informal_high = function (infinitive, regular) {
   return conjugator.merge(conjugator.base3(infinitive, regular), "세요");
 };
 conjugator.imperative_present_informal_high.conjugation = false;
-conjugator.khuyen_nhu_yeu_cau_ra_lenh = function (infinitive, regular) {
+conjugator.ra_lenh_lich_su_2 = function (infinitive, regular) {
   if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
     return conjugator.drop_l(conjugator.base3(infinitive, regular), "세요");
   }
   return conjugator.merge(conjugator.base3(infinitive, regular), "세요");
 };
-conjugator.khuyen_nhu_yeu_cau_ra_lenh.conjugation = true;
-
-// cam doan
-conjugator.dung_lam_gi = function (infinitive, regular) {
-  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
-    return conjugator.drop_l(
-      conjugator.base3(infinitive, regular),
-      "지 마세요"
-    );
-  }
-  return conjugator.merge(conjugator.base3(infinitive, regular), "지 마세요");
-};
-conjugator.dung_lam_gi.conjugation = true;
-
-conjugator.khuyen_nhu_yeu_cau_ra_lenh_trang_trong_hon = function (
-  infinitive,
-  regular
-) {
-  infinitive = conjugator.maybeStripHonorific(infinitive, regular);
-
-  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
-    return conjugator.drop_l(conjugator.base3(infinitive, regular), "십시오");
-  }
-  return conjugator.merge(conjugator.base3(infinitive, regular), "십시오");
-};
-conjugator.khuyen_nhu_yeu_cau_ra_lenh_trang_trong_hon.conjugation = true;
+conjugator.ra_lenh_lich_su_2.conjugation = true;
 
 conjugator.de_nghi_ru_re_cung_lam_gi_do = function (infinitive, regular) {
   infinitive = conjugator.base(infinitive);
@@ -1809,7 +1806,7 @@ conjugator.hoi_y_dinh_du_dinh_nguoi_nghe_lich_su.conjugation = true;
 conjugator.inquisitive_present_formal_low = function (infinitive, regular) {
   infinitive = conjugator.base(infinitive, regular);
   if (conjugator.is_l_irregular(infinitive, regular)) {
-    return conjugator.drop_l(infinitive);
+    return conjugator.drop_l(infinitive, "?li");
   }
   return conjugator.merge(infinitive, "니");
 };
@@ -1829,14 +1826,6 @@ conjugator.declarative_past_formal_low = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "다가");
 };
 conjugator.declarative_past_formal_low.conjugation = true;
-
-conjugator.imperative_formal_low = function (infinitive, regular) {
-  return conjugator.merge(
-    conjugator.hien_tai_v_a_k_lich_su(infinitive, regular),
-    "라"
-  );
-};
-conjugator.imperative_formal_low.conjugation = true;
 
 conjugator.propositive_present_formal_low = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "자");
