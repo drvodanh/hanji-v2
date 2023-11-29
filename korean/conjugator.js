@@ -1,7 +1,6 @@
 // vim: set ts=4 sw=4 expandtab
 // (C) 2010 Dan Bravender - licensed under the AGPL 3.0
 const Hangul = require("hangul-js");
-
 function hasPatchim(word) {
   return Hangul.endsWithConsonant(word);
 }
@@ -38,13 +37,13 @@ conjugator.vowel_contraction = function (vowel1, vowel2, new_vowel, trace) {
       hangeul.match(y.charAt(0), "ᄋ", vowel2, "*")
     ) {
       return [
-        "Rút gọn nguyên âm [" +
+        "Rút gọn nguyên âm [ " +
           vowel1 +
           " " +
           vowel2 +
           " -> " +
           new_vowel +
-          "]",
+          " ]",
         x.substring(0, x.length - 1) +
           hangeul.join(
             hangeul.lead(x.charAt(x.length - 1)),
@@ -64,8 +63,8 @@ conjugator.drop_l = function (x, y) {
       hangeul.vowel(x[x.length - 1])
     );
     let conjugation = x.substring(0, x.length - 1) + stem + y;
-    conjugator.reasons.push(`Bỏ ㄹ (${x} -> ${stem})`);
-    conjugator.reasons.push(`Ghép (${stem} + ${y} -> ${conjugation})`);
+    conjugator.reasons.push(`Bỏ ㄹ ( ${x} -> ${stem} )`);
+    conjugator.reasons.push(`Ghép ( ${stem} + ${y} -> ${conjugation} )`);
     return conjugation;
   }
 };
@@ -77,7 +76,7 @@ conjugator.drop_l_and_borrow_padchim = function (x, y) {
         hangeul.lead(x[x.length - 1]),
         hangeul.vowel(x[x.length - 1])
       );
-    conjugator.reasons.push(`Bỏ ㄹ (${x} -> ${stem})`);
+    conjugator.reasons.push(`Bỏ ㄹ ( ${x} -> ${stem} )`);
     return conjugator.merge(stem, y);
   }
 };
@@ -168,13 +167,13 @@ conjugator.merge = function (x, y, noReasons = false) {
         if (!noReasons) {
           conjugator.reasons.push(
             (output[0] ? output[0] : "") +
-              " (" +
+              " ( " +
               x +
               " + " +
               y +
               " -> " +
               output[1] +
-              ")"
+              " ) "
           );
         }
         response = output[1];
@@ -193,13 +192,13 @@ conjugator.mergeC = function (x, y, noReasons = false) {
       if (!noReasons) {
         conjugator.reasons.push(
           (output[0] ? output[0] : "") +
-            " (" +
+            " ( " +
             x +
             " + " +
             y +
             " -> " +
             output[1] +
-            ")"
+            " ) "
         );
       }
       response = output[1];
@@ -1061,7 +1060,7 @@ conjugator.is_itda_obda = function (infinitive, regular) {
 };
 
 conjugator.join = function (x, y) {
-  conjugator.reasons.push(`Ghép (${x} + ${y} -> ${x + y})`);
+  conjugator.reasons.push(`Ghép ( ${x} + ${y} -> ${x + y} )`);
   return x + y;
 };
 
@@ -1646,7 +1645,7 @@ conjugator.se_lam_gi_do_lich_su.conjugation = true;
 
 //!SECTION pass
 //LINK - se, khuyen nhu, yeu cau, menh lenh
-//todo -  dang sua vi tri
+//todo -  ok
 
 //십시오 Sử dụng khi khuyên nhủ, khuyên bảo hay yêu cầu, ra lệnh đối với người nghe, mang tính trang trọng, chính thức (공식적). Tùy từng câu văn mà các bạn có thể dịch là “hãy”,“xin mời”, "xin hãy",...
 conjugator.ra_lenh_k_lich_su = function (infinitive, regular) {
@@ -1687,6 +1686,17 @@ conjugator.ra_lenh_lich_su_2 = function (infinitive, regular) {
 };
 conjugator.ra_lenh_lich_su_2.conjugation = true;
 
+//. phia tren ok
+
+//!SECTION pass
+//LINK -
+//todo -  dang sua vi tri
+
+conjugator.de_nghi_ru_re_k_lich_su = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base(infinitive, regular), "자");
+};
+conjugator.de_nghi_ru_re_k_lich_su.conjugation = true;
+
 conjugator.de_nghi_ru_re_cung_lam_gi_do = function (infinitive, regular) {
   infinitive = conjugator.base(infinitive);
   if (conjugator.is_l_irregular(infinitive, regular)) {
@@ -1698,6 +1708,25 @@ conjugator.de_nghi_ru_re_cung_lam_gi_do = function (infinitive, regular) {
   return conjugator.merge(conjugator.base3(infinitive, regular), "읍시다");
 };
 conjugator.de_nghi_ru_re_cung_lam_gi_do.conjugation = true;
+
+conjugator.lua_chon_느냐 = function (infinitive, regular) {
+  let ending = "느냐";
+  infinitive = conjugator.base(infinitive, regular);
+  if (conjugator.is_itda_obda(infinitive, regular)) {
+    ending = "냐";
+  }
+  return conjugator.merge(infinitive, ending);
+};
+conjugator.lua_chon_느냐.conjugation = true;
+conjugator.lua_chon_냐 = function (infinitive, regular) {
+  let ending = "느냐";
+  infinitive = conjugator.base(infinitive, regular);
+  if (!conjugator.is_itda_obda(infinitive, regular)) {
+    ending = "냐";
+  }
+  return conjugator.merge(infinitive, ending);
+};
+conjugator.lua_chon_냐.conjugation = true;
 
 ///////////////
 
@@ -1779,6 +1808,20 @@ conjugator.kinh_ngu_thi_tuong_lai_tuong_tu_실_거에요 = function (
 };
 conjugator.kinh_ngu_thi_tuong_lai_tuong_tu_실_거에요.conjugation = true;
 
+//. du dinh y kien
+conjugator.hoi_y_kien_thong_thuong = function (infinitive, regular) {
+  return conjugator.merge(conjugator.future_base(infinitive, regular), " 래요");
+};
+conjugator.hoi_y_kien_thong_thuong.conjugation = true;
+
+conjugator.hoi_y_kien_thong_thuong_2 = function (infinitive, regular) {
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "실래요");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "실래요");
+};
+conjugator.hoi_y_kien_thong_thuong_2.conjugation = true;
+
 conjugator.hoi_y_dinh_du_dinh_nguoi_nghe = function (infinitive, regular) {
   if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
     return conjugator.drop_l(conjugator.base3(infinitive, regular), "시겠어요");
@@ -1812,25 +1855,10 @@ conjugator.inquisitive_present_formal_low = function (infinitive, regular) {
 };
 conjugator.inquisitive_present_formal_low.conjugation = true;
 
-conjugator.interrogative_past_formal_low = function (infinitive, regular) {
-  let ending = "느냐";
-  infinitive = conjugator.base(infinitive, regular);
-  if (!conjugator.is_itda_obda(infinitive, regular)) {
-    ending = "냐";
-  }
-  return conjugator.merge(infinitive, ending);
-};
-conjugator.interrogative_past_formal_low.conjugation = true;
-
 conjugator.declarative_past_formal_low = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "다가");
 };
 conjugator.declarative_past_formal_low.conjugation = true;
-
-conjugator.propositive_present_formal_low = function (infinitive, regular) {
-  return conjugator.merge(conjugator.base(infinitive, regular), "자");
-};
-conjugator.propositive_present_formal_low.conjugation = true;
 
 conjugator.connective_if = function (infinitive, regular) {
   return conjugator.merge(conjugator.base3(infinitive, regular), "면");
