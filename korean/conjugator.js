@@ -1853,6 +1853,10 @@ conjugator.hoi_y_dinh_du_dinh_nguoi_nghe_lich_su = function (
 conjugator.hoi_y_dinh_du_dinh_nguoi_nghe_lich_su.conjugation = true;
 
 //. x6
+conjugator.danh_tu_hoa = function (infinitive, regular) {
+  return conjugator.merge(conjugator.base3(infinitive, regular), "음");
+};
+conjugator.danh_tu_hoa.conjugation = true;
 
 conjugator.다가 = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "다가");
@@ -1875,11 +1879,6 @@ conjugator.connective_but = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "지만");
 };
 conjugator.connective_but.conjugation = true;
-
-conjugator.nominal_ing = function (infinitive, regular) {
-  return conjugator.merge(conjugator.base3(infinitive, regular), "음");
-};
-conjugator.nominal_ing.conjugation = true;
 
 conjugator.adjective = function (infinitive, regular) {
   let stem = conjugator.base3(infinitive, regular);
