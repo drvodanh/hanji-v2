@@ -148,6 +148,8 @@ conjugator.merge_rules = [
     셨: true,
     실: true,
     시: true,
+    니: true,
+    냐: true,
   }),
 
   // default rule
@@ -1710,23 +1712,29 @@ conjugator.de_nghi_ru_re_cung_lam_gi_do = function (infinitive, regular) {
 conjugator.de_nghi_ru_re_cung_lam_gi_do.conjugation = true;
 
 conjugator.lua_chon_느냐 = function (infinitive, regular) {
-  let ending = "느냐";
-  infinitive = conjugator.base(infinitive, regular);
-  if (conjugator.is_itda_obda(infinitive, regular)) {
-    ending = "냐";
-  }
-  return conjugator.merge(infinitive, ending);
+  return conjugator.mergeC(infinitive, "느냐");
 };
 conjugator.lua_chon_느냐.conjugation = true;
 conjugator.lua_chon_냐 = function (infinitive, regular) {
-  let ending = "느냐";
-  infinitive = conjugator.base(infinitive, regular);
-  if (!conjugator.is_itda_obda(infinitive, regular)) {
-    ending = "냐";
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "냐");
   }
-  return conjugator.merge(infinitive, ending);
+  return conjugator.merge(conjugator.base3(infinitive, regular), "냐");
 };
 conjugator.lua_chon_냐.conjugation = true;
+
+conjugator.ngu_phap_li_v_니 = function (infinitive, regular) {
+  return conjugator.mergeC(infinitive, "니");
+};
+conjugator.ngu_phap_li_v_니.conjugation = true;
+
+conjugator.ngu_phap_li_a_니 = function (infinitive, regular) {
+  if (conjugator.is_l_irregular(conjugator.base(infinitive, regular))) {
+    return conjugator.drop_l(conjugator.base3(infinitive, regular), "니");
+  }
+  return conjugator.merge(conjugator.base3(infinitive, regular), "니");
+};
+conjugator.ngu_phap_li_a_니.conjugation = true;
 
 ///////////////
 
@@ -1846,19 +1854,10 @@ conjugator.hoi_y_dinh_du_dinh_nguoi_nghe_lich_su.conjugation = true;
 
 //. x6
 
-conjugator.inquisitive_present_formal_low = function (infinitive, regular) {
-  infinitive = conjugator.base(infinitive, regular);
-  if (conjugator.is_l_irregular(infinitive, regular)) {
-    return conjugator.drop_l(infinitive, "?li");
-  }
-  return conjugator.merge(infinitive, "니");
-};
-conjugator.inquisitive_present_formal_low.conjugation = true;
-
-conjugator.declarative_past_formal_low = function (infinitive, regular) {
+conjugator.다가 = function (infinitive, regular) {
   return conjugator.merge(conjugator.base(infinitive, regular), "다가");
 };
-conjugator.declarative_past_formal_low.conjugation = true;
+conjugator.다가.conjugation = true;
 
 conjugator.connective_if = function (infinitive, regular) {
   return conjugator.merge(conjugator.base3(infinitive, regular), "면");
